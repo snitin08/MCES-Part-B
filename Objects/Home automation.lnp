@@ -1,0 +1,7 @@
+--cpu ARM7TDMI
+".\objects\startup.o"
+".\objects\automation.o"
+--library_type=microlib --strict --scatter ".\Objects\Home automation.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list ".\Listings\Home automation.map" -o ".\Objects\Home automation.axf"
