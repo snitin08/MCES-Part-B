@@ -30,16 +30,22 @@ Build target 'Target 1'
 compiling Automation.c...
 Automation.c(5): warning:  #1295-D: Deprecated declaration plantWatering - give arg types
   void plantWatering();
-Automation.c(93): warning:  #111-D: statement is unreachable
+Automation.c(8): warning:  #1295-D: Deprecated declaration doorOpening - give arg types
+  void doorOpening();
+Automation.c(9): warning:  #1295-D: Deprecated declaration beep - give arg types
+  void beep();
+Automation.c(16): warning:  #177-D: variable "val"  was declared but never referenced
+   unsigned int val=0;
+Automation.c(148): warning:  #111-D: statement is unreachable
   	return 0;
-Automation.c(94): warning:  #1-D: last line of file ends without a newline
+Automation.c(149): warning:  #1-D: last line of file ends without a newline
   }
-Automation.c: 3 warnings, 0 errors
+Automation.c: 6 warnings, 0 errors
 linking...
-Program Size: Code=1300 RO-data=16 RW-data=0 ZI-data=1160  
+Program Size: Code=1924 RO-data=16 RW-data=0 ZI-data=1160  
 FromELF: creating hex file...
-".\Objects\Home automation.axf" - 0 Error(s), 3 Warning(s).
-Build Time Elapsed:  00:00:05
+".\Objects\Home automation.axf" - 0 Error(s), 6 Warning(s).
+Build Time Elapsed:  00:00:00
 </pre>
 </body>
 </html>
