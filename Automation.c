@@ -78,9 +78,8 @@ void plantWatering()
 
 unsigned int adc(int no,int ch) 
 { 
-            // adc(1,4) for humidity sensor
- //  
- //  
+            // adc(1,4) for external humidity sensor
+ //  adc(1,3) for internal humidity sensor 
  unsigned int val; 
  PINSEL0 |=  0x0F300000;   /* Select the P0_13 AD1.4 for ADC function */ 
                                              /* Select the P0_12 AD1.3 for ADC function */ 
@@ -136,18 +135,17 @@ void doorOpening()
 	}
 }
 
-void rundcmotor(int speed){
+void rundcmotor(unsigned int speed){
 	PINSEL0 |= 2<< 18; //P0.9 for PWM6
 	PWMPCR = (1<<14);
 	PWMMR0 = 1000;
-	PWMMR6 = (1000U*dutycycle)/100;
-	PMWTCR = 0x00000009;
+	PWMMR6 = (1000U*speed)/100;
+	PWMTCR = 0x00000009;
 	PWMLER = 0x70;
 }
 	
 
 void runfan(){
-	while(1){
 		unsigned int val = adc(1,3)/10;
 		if(val>30) rundcmotor(100);
 		else{
@@ -157,7 +155,6 @@ void runfan(){
 			}
 		}
 		delay_ms(10);
-	}
 }
 				
 
