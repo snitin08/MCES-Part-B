@@ -175,10 +175,10 @@ int main()
 	IO0DIR|= 1U<<31; // FOR LED P0.31
 	do
 	{
-		//doorOpening();
-		//plantWatering();
+		doorOpening();
+		plantWatering();
 		runfan();
-		//turnonlights();
+		turnonlights();
 	}while(1);
 	return 0;
 }
