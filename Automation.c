@@ -1,6 +1,8 @@
 #include<lpc214x.h>
 #define DOOR_OPEN (IO0PIN & 1<<14)
 #define PLOCK 0x00000400
+#define LED_OFF IO0SET = 1 << 31
+#define LED_ON IO0CLR = 1 << 31
 unsigned int adc(int no,int ch);
 void plantWatering();
 void SystemInit(void);
@@ -80,6 +82,7 @@ unsigned int adc(int no,int ch)
 { 
             // adc(1,4) for external humidity sensor
  //  adc(1,3) for internal humidity sensor 
+ //  adc(1,2) for light sensor
  unsigned int val; 
  PINSEL0 |=  0x0F300000;   /* Select the P0_13 AD1.4 for ADC function */ 
                                              /* Select the P0_12 AD1.3 for ADC function */ 
@@ -105,7 +108,7 @@ unsigned int adc(int no,int ch)
 void doorOpening()
 {
 	//P0.12 for IR sensor
-	unsigned int digitalValue = !(IO1PIN & (1<<12)); //read value of port P0.12
+	unsigned int digitalValue = !(IO0PIN & (1<<12)); //read value of port P0.12
 	if(digitalValue==1)
 	{
 		beep(); //buzzer 
@@ -121,7 +124,7 @@ void doorOpening()
 		IO0CLR = 0X00F00000;IO0SET = 0X00400000;delay_ms(10);if(--no_of_steps_clk == 0) break; 
 		IO0CLR = 0X00F00000;IO0SET = 0X00800000;delay_ms(10);if(--no_of_steps_clk == 0) break; 
 		}while(1); 
-		while((digitalValue = (IO1PIN & (1<<12)))==1);
+		while((digitalValue = !(IO0PIN & (1<<12)))==1);
 		do{ 
 		IO0CLR = 0X00F00000;IO0SET = 0X00800000;delay_ms(10);if(--no_of_steps_aclk == 0) break; 
 		IO0CLR = 0X00F00000;IO0SET = 0X00400000;delay_ms(10);if(--no_of_steps_aclk == 0) break; 
@@ -136,6 +139,7 @@ void doorOpening()
 }
 
 void rundcmotor(unsigned int speed){
+	
 	PINSEL0 |= 2<< 18; //P0.9 for PWM6
 	PWMPCR = (1<<14);
 	PWMMR0 = 1000;
@@ -156,19 +160,25 @@ void runfan(){
 		}
 		delay_ms(10);
 }
-				
+
+void turnonlights(){
+	unsigned int val = adc(1,2);
+	if(val>200) LED_OFF;
+	else LED_ON;
+}
 
 
 
 int main()
 {
 	SystemInit( ); 
-	
+	IO0DIR|= 1U<<31; // FOR LED P0.31
 	do
 	{
-		doorOpening();
-		plantWatering();
+		//doorOpening();
+		//plantWatering();
 		runfan();
+		//turnonlights();
 	}while(1);
 	return 0;
 }
