@@ -136,14 +136,42 @@ void doorOpening()
 	}
 }
 
+void rundcmotor(int speed){
+	PINSEL0 |= 2<< 18; //P0.9 for PWM6
+	PWMPCR = (1<<14);
+	PWMMR0 = 1000;
+	PWMMR6 = (1000U*dutycycle)/100;
+	PMWTCR = 0x00000009;
+	PWMLER = 0x70;
+}
+	
+
+void runfan(){
+	while(1){
+		unsigned int val = adc(1,3)/10;
+		if(val>30) rundcmotor(100);
+		else{
+			if(val<5)  rundcmotor(0);
+			else{
+				rundcmotor(val);
+			}
+		}
+		delay_ms(10);
+	}
+}
+				
+
+
 
 int main()
 {
 	SystemInit( ); 
+	
 	do
 	{
 		doorOpening();
 		plantWatering();
+		runfan();
 	}while(1);
 	return 0;
 }
